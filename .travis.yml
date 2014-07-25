@@ -2,7 +2,9 @@ language:
   - objective-c
 
 env:
-    global: LATEST_TAG=1
+  global:
+    - LATEST_TAG=1
+    - GIT_SDIR=Pillow
   matrix:
     - VERSION=2.7.8
     - VERSION=3.2.5
@@ -13,8 +15,8 @@ install:
     - source run_install.sh
     - get_python_environment macpython $VERSION venv
     - pip install delocate
-    - if [ -n "$LATEST_TAG" ]; then checkout_closest_tag Pillow; fi
-    - cd Pillow
+    - if [ -n "$LATEST_TAG" ]; then checkout_closest_tag $GIT_SDIR; fi
+    - cd $GIT_SDIR
     - python setup.py bdist_wheel
     - delocate-wheel dist/*.whl
     - rename_wheels dist/*.whl
@@ -22,7 +24,7 @@ install:
     - cd ..
 
 script:
-    - cd Pillow
+    - cd $GIT_SDIR
     - python selftest.py --installed
     - pip install nose
     - export NOSE_PROCESS_TIMEOUT=600
@@ -34,7 +36,7 @@ script:
       fi
     - cd ..
 
-before_deploy: cd Pillow/dist
+before_deploy: cd $GIT_SDIR/dist
 deploy:
   provider: cloudfiles
   username: travis-worker
