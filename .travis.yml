@@ -33,6 +33,7 @@ script:
       python Tests/run.py --installed ;
       fi
     - cd ..
+    - ls -al Pillow/dist/*
 
 before_deploy: cd Pillow/dist
 deploy:
